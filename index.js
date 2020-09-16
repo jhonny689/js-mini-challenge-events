@@ -28,6 +28,22 @@ PLAYERS.forEach(renderPlayer)
 
 /***** End of Starter Code ****/
 
+document.addEventListener('DOMContentLoaded', function(e){
+  const header = document.querySelector("h1#header");
+  header.addEventListener('click', function(e){
+    toggleColor(e.target);
+  });
+
+  const form = document.querySelector("form");
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    newPlayer = createNewPlayer(e.target);
+    renderPlayer(newPlayer);
+  });
+
+  addCustomEventListener('button.like-button','click',taskClickHandler);
+  
+})
 
 
 
@@ -42,5 +58,40 @@ function toggleColor(element) {
 
 
 /***** Deliverable 2 *****/
+function createNewPlayer(form){
+  const newPlayer = {};
+  newPlayer.number = form.number.value;
+  newPlayer.name = form.name.value;
+  newPlayer.nickname = form.nickname.value;
+  newPlayer.photo = form.photo.value;
+  newPlayer.likes = 1000;
+  //debugger;
+  return newPlayer;
+}
 
 /***** Deliverable 3 *****/
+
+function addCustomEventListener(selector, event, handler) {
+  let rootElement = document.querySelector('div.player-container');
+  //since the root element is set to be body for our current dealings
+  rootElement.addEventListener(event, function (evt) {
+          var targetElement = evt.target;
+          while (targetElement != null) {
+              if (targetElement.matches(selector)) {
+                  handler(evt);
+                  return;
+              }
+              targetElement = targetElement.parentElement;
+          }
+      },
+      true
+  );
+}
+
+function taskClickHandler(e){
+  //debugger;
+  const likesP = e.target.parentElement.querySelector('p.likes');
+  let likes = parseInt(likesP.innerText.replace(' likes',''));
+  likesP.innerText = ++likes + " likes";
+}
+
